@@ -1,0 +1,79 @@
+Sub RunForAll()
+    Dim xSh As Worksheet
+    Application.ScreenUpdating = False
+    For Each xSh In Worksheets
+        xSh.Select
+        Call alphatest
+    Next
+    Application.ScreenUpdating = True
+End Sub
+Sub alphatest()
+Dim ticker_name As String
+Dim Yearly_Change As Double
+Dim Percent_Change As Double
+Dim open_price As Double
+Dim close_price As Double
+
+TotalSV = 0 'total stock volume
+
+Dim Price_Row As Long
+Price_Row = 2
+
+Dim str As Integer 'summary total row
+str = 2
+
+lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+
+ For i = 2 To lastrow:
+            If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+               ticker_name = Cells(i, 1).Value 'record ticker name
+            
+               TotalSV = TotalSV + Range("G" & i).Value 'total stock volume
+               
+               Range("I" & str).Value = ticker_name 'print ticker name
+               
+               
+               Range("L" & str).Value = TotalSV 'print total stock volume
+               
+               open_price = Range("C" & Price_Row).Value
+               close_price = Range("F" & i).Value
+               Yearly_Change = close_price - open_price 'yearly change
+               
+                  If open_price = 0 Then
+                      Percent_Change = 0
+                     Else
+                         Percent_Change = Yearly_Change / open_price 'percent change
+                  End If
+                  
+                  Range("J" & str).Value = Yearly_Change
+                  Range("K" & str).Value = Percent_Change
+                  Range("K" & str).NumberFormat = "0.00%"
+                  
+                  'color scheme
+                  If Range("J" & str).Value >= 0 Then
+                    Range("J" & str).Interior.ColorIndex = 4
+                    
+                    Else: Range("J" & str).Interior.ColorIndex = 3
+                    
+                  End If
+                
+                  
+                  str = str + 1
+                  Price_Row = i + 1
+               
+                 
+                  TotalSV = 0 'reset stock volume
+       Else
+              TotalSV = TotalSV + Range("G" & i).Value
+                 
+    End If
+Next i
+
+'HEADERS FOR COLUMNS
+Range("I1").Value = "Ticker"
+Range("J1").Value = "Yearly Change"
+Range("K1").Value = "Percent Change"
+Range("L1").Value = "Total Stock Volume"
+
+
+End Sub
