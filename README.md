@@ -17,3 +17,5 @@ For the colors I did an if to check the value and based on the value it will mak
 
 Summary Total Row and Price Row is added by one to add the info in each row.
 The Total Volume is reset to 0 to get the volume for the following ticker.
+
+I couldn't solve Greatest % Increase, Greatest % Decrease, and Greatest Total Volume
